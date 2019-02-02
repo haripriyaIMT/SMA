@@ -1,0 +1,44 @@
+#Source Identification
+consumerKey = '08LJMN5T5xVjliZdQRj6itPAb'
+consumerSecret = 'cddUGZL8W8MXAQv1llbVJIiLoBWjHuTBOxSVhD8XOks46RO1lf'
+OauthToken = '1089408873939709952-iHq2H02pj9Uryx4L1rUoK8VoO1hZQm'
+OauthSecret = 'usFj5E3jxIfQ8T6UeaccmtwRH8JUWjwwuwxoYuB3PHsGI'
+
+#Setup twitter connection
+library(twitteR)
+setup_twitter_oauth(consumerKey, consumerSecret, OauthToken, OauthSecret)
+
+library(tidyverse)
+library(rtweet) 
+
+#Action Anlaytics
+data <- search_tweets("AnandMahindra", n = 50)
+
+data_profile <- search_users("@anandmahindra")
+
+data_profile$name
+data_profile$location
+data_profile$retweet_count
+
+rt <- search_tweets("#narendramodi", n = 1800, include_rts = FALSE)
+ts_plot(rt, "3 hours") +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(plot.title = ggplot2::element_text(face = "bold")) +
+  ggplot2::labs(
+    x = NULL, y = NULL,
+    title = "Frequency of #narendramodi Twitter statuses from past 9 days",
+    subtitle = "Twitter status (tweet) counts aggregated using three-hour intervals",
+    caption = "\nSource: Data collected from Twitter's REST API via rtweet"
+  )
+test1 <- get_timelines("narendramodi", n = 1200)
+test1
+
+#Location Analytics
+test2 <- get_trends(woeid = 2295411, lat = NULL, lng = NULL,
+                    exclude_hashtags = FALSE, token = NULL, parse = TRUE)
+test2
+
+rt <- search_tweets(
+  "lang:en", geocode = lookup_coords("in"), n = 1000
+)
+rt <- lat_lng(rt)
