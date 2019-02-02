@@ -1,0 +1,87 @@
+consumerKey = '08LJMN5T5xVjliZdQRj6itPAb'
+consumerSecret = 'cddUGZL8W8MXAQv1llbVJIiLoBWjHuTBOxSVhD8XOks46RO1lf'
+OauthToken = '1089408873939709952-iHq2H02pj9Uryx4L1rUoK8VoO1hZQm'
+OauthSecret = 'usFj5E3jxIfQ8T6UeaccmtwRH8JUWjwwuwxoYuB3PHsGI'
+
+#Setup twitter connection
+library(twitteR)
+setup_twitter_oauth(consumerKey, consumerSecret, OauthToken, OauthSecret)
+
+ATweets=searchTwitter("Anand Mahindra", lang = "en")
+ATweets
+for(i in 1:length(ATweets)) {
+  tweet <- print(ATweets[[i]]$getText())
+  i=i+1
+}
+
+library(tidyverse)
+write.csv2(ATweets, file = "AnandMahindra_tweets.csv", row.names = FALSE, na = "")
+
+
+# Text Parsing and filtering
+install.packages("Rcmdr")
+library(Rcmdr)
+install.packages("RcmdrPlugin.temis")
+library(RcmdrPlugin.temis)
+test1 <- read.csv(file.choose(), header = T)
+str(test1)
+
+library(tm)
+corpus <- Corpus(VectorSource(test1$TweetTextSize))
+inspect(corpus[1:10])
+
+corpus <- tm_map(corpus, tolower)
+inspect(corpus[1:10])
+
+corpus <- tm_map(corpus, removePunctuation)
+inspect(corpus[1:10])
+
+corpus <- tm_map(corpus, removeNumbers)
+inspect(corpus[1:10])
+
+cleanset <- tm_map(corpus, removeWords, stopwords('English'))
+inspect(corpus[1:10])
+
+cleanset <- tm_map(cleanset, removeWords, c('\t','\n'))
+incleanset <- tm_map(cleanset, gsub, pattern='indiaâ', replacement='india')
+inspect(corpus[1:10])
+
+cleanset <- tm_map(cleanset, stripWhitespace)
+inspect(corpus[1:10])
+
+# Text transformation
+tdm <- TermDocumentMatrix(cleanset)
+tdm
+tdm <- as.matrix(tdm)
+tdm[1:150, 1:150]
+
+v <- sort(rowSums(tdm), decreasing = TRUE)
+d <- data.frame(word= names(v), freq = v)
+head(d,10)
+
+install.packages("wordcloud")
+library(wordcloud)
+
+set.seed(1234)
+wordcloud(words = d$word, freq = d$freq, min.freq = 1, max.words = 250, random.order = FALSE, rot.per = 0.35, colors = brewer.pal(8, "Dark2"))
+warnings()
+
+#Text Mining
+install.packages("factoextra")
+library(factoextra)
+install.packages("rattle")
+library(rattle)
+install.packages("fpc")
+library(fpc)
+install.packages("flexclust")
+library(flexclust)
+install.packages("dendextend")
+library(dendextend)
+
+get_clust_tendency(tdm, n=100, gradient = list(low = "steelblue", high = "white"))
+
+distMatrix <- dist(tdm, method = 'euclidean')
+head(distMatrix)
+
+dendo <- hclust(distMatrix, method = "ward.D")
+plot(dendo)
