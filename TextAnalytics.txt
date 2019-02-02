@@ -1,3 +1,4 @@
+# Source Identification
 consumerKey = '08LJMN5T5xVjliZdQRj6itPAb'
 consumerSecret = 'cddUGZL8W8MXAQv1llbVJIiLoBWjHuTBOxSVhD8XOks46RO1lf'
 OauthToken = '1089408873939709952-iHq2H02pj9Uryx4L1rUoK8VoO1hZQm'
@@ -9,22 +10,16 @@ setup_twitter_oauth(consumerKey, consumerSecret, OauthToken, OauthSecret)
 
 ATweets=searchTwitter("Anand Mahindra", lang = "en")
 ATweets
-for(i in 1:length(ATweets)) {
-  tweet <- print(ATweets[[i]]$getText())
-  i=i+1
-}
 
-library(tidyverse)
-write.csv2(ATweets, file = "AnandMahindra_tweets.csv", row.names = FALSE, na = "")
-
+#Read file
+test1 <- read.csv(file.choose(),header=T)
+str(test1)
 
 # Text Parsing and filtering
 install.packages("Rcmdr")
 library(Rcmdr)
 install.packages("RcmdrPlugin.temis")
 library(RcmdrPlugin.temis)
-test1 <- read.csv(file.choose(), header = T)
-str(test1)
 
 library(tm)
 corpus <- Corpus(VectorSource(test1$TweetTextSize))
@@ -43,7 +38,7 @@ cleanset <- tm_map(corpus, removeWords, stopwords('English'))
 inspect(corpus[1:10])
 
 cleanset <- tm_map(cleanset, removeWords, c('\t','\n'))
-incleanset <- tm_map(cleanset, gsub, pattern='indiaâ', replacement='india')
+incleanset <- tm_map(cleanset, gsub, pattern='indiaÃ¢', replacement='india')
 inspect(corpus[1:10])
 
 cleanset <- tm_map(cleanset, stripWhitespace)
@@ -85,4 +80,3 @@ head(distMatrix)
 
 dendo <- hclust(distMatrix, method = "ward.D")
 plot(dendo)
-
