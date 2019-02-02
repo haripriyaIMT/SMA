@@ -1,16 +1,3 @@
-# Source Identification
-consumerKey = '08LJMN5T5xVjliZdQRj6itPAb'
-consumerSecret = 'cddUGZL8W8MXAQv1llbVJIiLoBWjHuTBOxSVhD8XOks46RO1lf'
-OauthToken = '1089408873939709952-iHq2H02pj9Uryx4L1rUoK8VoO1hZQm'
-OauthSecret = 'usFj5E3jxIfQ8T6UeaccmtwRH8JUWjwwuwxoYuB3PHsGI'
-
-#Setup twitter connection
-library(twitteR)
-setup_twitter_oauth(consumerKey, consumerSecret, OauthToken, OauthSecret)
-
-ATweets=searchTwitter("Anand Mahindra", lang = "en")
-ATweets
-
 #Read file
 test1 <- read.csv(file.choose(),header=T)
 str(test1)
