@@ -3,11 +3,6 @@ test1 <- read.csv(file.choose(),header=T)
 str(test1)
 
 # Text Parsing and filtering
-install.packages("Rcmdr")
-library(Rcmdr)
-install.packages("RcmdrPlugin.temis")
-library(RcmdrPlugin.temis)
-
 library(tm)
 corpus <- Corpus(VectorSource(test1$TweetTextSize))
 inspect(corpus[1:10])
@@ -25,7 +20,6 @@ cleanset <- tm_map(corpus, removeWords, stopwords('English'))
 inspect(corpus[1:10])
 
 cleanset <- tm_map(cleanset, removeWords, c('\t','\n'))
-incleanset <- tm_map(cleanset, gsub, pattern='indiaâ', replacement='india')
 inspect(corpus[1:10])
 
 cleanset <- tm_map(cleanset, stripWhitespace)
@@ -46,7 +40,6 @@ library(wordcloud)
 
 set.seed(1234)
 wordcloud(words = d$word, freq = d$freq, min.freq = 1, max.words = 250, random.order = FALSE, rot.per = 0.35, colors = brewer.pal(8, "Dark2"))
-warnings()
 
 #Text Mining
 install.packages("factoextra")
@@ -60,7 +53,7 @@ library(flexclust)
 install.packages("dendextend")
 library(dendextend)
 
-get_clust_tendency(tdm, n=100, gradient = list(low = "steelblue", high = "white"))
+get_clust_tendency(tdm,n=100)
 
 distMatrix <- dist(tdm, method = 'euclidean')
 head(distMatrix)
