@@ -5,22 +5,16 @@ OauthToken = '1089408873939709952-iHq2H02pj9Uryx4L1rUoK8VoO1hZQm'
 OauthSecret = 'usFj5E3jxIfQ8T6UeaccmtwRH8JUWjwwuwxoYuB3PHsGI'
 
 #Setup twitter connection
-library(twitteR)
-setup_twitter_oauth(consumerKey, consumerSecret, OauthToken, OauthSecret)
+create_token(consumer_key = consumerKey, consumer_secret = consumerSecret, access_token = OauthToken, access_secret = OauthSecret)
 
 library(tidyverse)
 library(rtweet) 
+install.packages("backports")
+library(backports)
 
 #Action Anlaytics
-data <- search_tweets("AnandMahindra", n = 50)
-
-data_profile <- search_users("@anandmahindra")
-
-data_profile$name
-data_profile$location
-data_profile$retweet_count
-
 rt <- search_tweets("#narendramodi", n = 1800, include_rts = FALSE)
+rt
 ts_plot(rt, "3 hours") +
   ggplot2::theme_minimal() +
   ggplot2::theme(plot.title = ggplot2::element_text(face = "bold")) +
@@ -33,7 +27,7 @@ ts_plot(rt, "3 hours") +
 test1 <- get_timelines("narendramodi", n = 1200)
 test1
 
-#Location Analytics
+
 test2 <- get_trends(woeid = 2295411, lat = NULL, lng = NULL,
                     exclude_hashtags = FALSE, token = NULL, parse = TRUE)
 test2
