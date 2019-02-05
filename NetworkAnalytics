@@ -28,6 +28,7 @@ data_profile <- search_users("@anandmahindra")
 
 data_profile$name
 data_profile$description
+data_profile$location
 data_profile$followers_count
 
 followers <- get_followers("@anilambani")
